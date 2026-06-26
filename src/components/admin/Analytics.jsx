@@ -31,36 +31,37 @@ export default function Analytics() {
 
   const fetchAnalytics = async () => {
 
-    try {
+  try {
 
-      const token =
-        localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-      const response = await api.get(
-  "/admin/analytics",
-  {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    withCredentials: true,
+    console.log("TOKEN =", token);   // <-- HE ADD KAR
+
+    const response = await api.get(
+      "/admin/analytics",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      }
+    );
+
+    console.log("RESPONSE =", response.data); // <-- HE PAN ADD KAR
+
+    setAnalytics(response.data);
+
+  } catch (error) {
+
+    console.log("ERROR =", error);   // <-- HE RAHU DE
+
+  } finally {
+
+    setLoading(false);
+
   }
-);
 
-console.log(response.data);
-
-setAnalytics(response.data);
-
-    } catch (error) {
-
-      console.log(error);
-
-    } finally {
-
-      setLoading(false);
-
-    }
-
-  };
+};
 
   useEffect(() => {
 
