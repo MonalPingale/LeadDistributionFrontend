@@ -62,7 +62,7 @@ const message = await response.text();
 
 console.log("MESSAGE =", message);
 
-    const message = await response.text();
+
 
     console.log(message);
 
