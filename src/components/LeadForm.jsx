@@ -38,22 +38,29 @@ const handleSubmit = async (e) => {
     setTimeout(() => setStep(1), 1000);
     setTimeout(() => setStep(2), 2000);
 
-    const response = await fetch(
-"https://leaddistributionbackend.onrender.com/dashboard/createLead",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          customerName: formData.name,
-          customerPhone: formData.phone,
-          customerAddress: formData.city,
-          serviceType: formData.service,
-          problemDescription: formData.description,
-        }),
-      }
-    );
+  const response = await fetch(
+  "https://leaddistributionbackend.onrender.com/dashboard/createLead",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      customerName: formData.name,
+      customerPhone: formData.phone,
+      customerAddress: formData.city,
+      serviceType: formData.service,
+      problemDescription: formData.description,
+    }),
+  }
+);
+
+console.log("STATUS =", response.status);
+console.log("OK =", response.ok);
+
+const message = await response.text();
+
+console.log("MESSAGE =", message);
 
     const message = await response.text();
 
