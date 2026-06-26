@@ -1,79 +1,61 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import api from "../../api/provider";
-
+import api from "../../api/provider"
 
 export default function MyWork() {
 
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchMyLeads = async () => {
+ const fetchMyLeads = async () => {
+  try {
+    const token = localStorage.getItem("token");
 
-    try {
+    const response = await axios.get(
+      "https://leaddistributionbackend.onrender.com/provider/leads",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-      const token = localStorage.getItem("token");
+    console.log("LEADS =", response.data);
+    setLeads(response.data);
 
-      console.log("TOKEN =", token);
-
-      const response = await api.get(
-        "/provider/leads",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        }
-      );
-
-      console.log("LEADS DATA =", response.data);
-
-      setLeads(response.data);
-
-    } catch (error) {
-
-      console.log("ERROR =", error);
-
-    } finally {
-
-      setLoading(false);
-
-    }
-  };
+  } catch (error) {
+    console.log("ERROR =", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     fetchMyLeads();
   }, []);
 
   const markCompleted = async (leadId) => {
+  try {
+    const token = localStorage.getItem("token");
 
-    try {
+    await axios.put(
+      `https://leaddistributionbackend.onrender.com/provider/lead/${leadId}/complete`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-      const token = localStorage.getItem("token");
+    alert("Lead Completed Successfully");
+    fetchMyLeads();
 
-      await api.get(
-"/provider/leads",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        }
-      );
-
-      alert("Lead Completed Successfully");
-
-      fetchMyLeads();
-
-    } catch (error) {
-
-      console.log(error);
-
-      alert("Unable to complete lead");
-
-    }
-  };
+  } catch (error) {
+    console.log(error);
+    alert("Unable to complete lead");
+  }
+};
 
   const assignedCount =
     leads.filter(
