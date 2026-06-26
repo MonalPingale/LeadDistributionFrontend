@@ -36,17 +36,19 @@ export default function Analytics() {
       const token =
         localStorage.getItem("token");
 
-      await api.get(
-"/admin/analytics",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await api.get(
+  "/admin/analytics",
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    withCredentials: true,
+  }
+);
 
-      setAnalytics(response.data);
+console.log(response.data);
+
+setAnalytics(response.data);
 
     } catch (error) {
 
@@ -67,18 +69,20 @@ export default function Analytics() {
   }, []);
 
   if (loading) {
+  return (
+    <div className="min-h-screen bg-[#0b0914] flex justify-center items-center text-white">
+      Loading Analytics...
+    </div>
+  );
+}
 
-    return (
-
-      <div className="min-h-screen bg-[#0b0914] flex justify-center items-center text-white">
-
-        Loading Analytics...
-
-      </div>
-
-    );
-
-  }
+if (!analytics) {
+  return (
+    <div className="min-h-screen bg-[#0b0914] flex justify-center items-center text-white">
+      No Analytics Data
+    </div>
+  );
+}
 
   const serviceData = analytics.serviceAnalytics;
 const providerData = analytics.providerAnalytics;
@@ -449,7 +453,7 @@ const providerData = analytics.providerAnalytics;
 
       <tbody>
 
-        {analytics.customerAnalytics.map((customer, index) => (
+        {analytics?.customerAnalytics?.map((customer, index) => (
 
           <tr
             key={index}
@@ -522,7 +526,7 @@ Provider Performance
 
 {
 
-analytics.providerAnalytics.map((provider,index)=>(
+analytics?.providerAnalytics?.map((provider,index)=>(
 
 <tr
 key={index}
@@ -625,7 +629,7 @@ Completed
 
 {
 
-analytics.serviceAnalytics.map((service,index)=>(
+analytics?.serviceAnalytics?.map((service,index)=>(
 
 <tr
 key={index}
